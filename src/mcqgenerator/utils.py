@@ -10,14 +10,14 @@ def read_file(file):
             pdf_reader=PyPDF2.PdfFileReader(file)
             text=""
             for pages in pdf_reader.pages:
-                text+=pages.extract_text
+                text+=pages.extract_text()
             return text
         except Exception as e:
             raise Exception('Error reading the pdf file')
     elif file.name.endswith('.txt'):
         return file.read().decode('utf-8')
     else :
-        raise Exception('Unsupported file format onlt pdf and text file supported')
+        raise Exception('Unsupported file format only pdf and text file supported')
     
 
 def get_table_data(quiz_str):
@@ -36,7 +36,7 @@ def get_table_data(quiz_str):
 
             )
             correct=value['correct']
-            quiz_data_table.append({'MCQ':mcq ,"Choices":options,"correct":correct})
+            quiz_data_table.append({'MCQ':mcq ,"Choices":options,"Correct":correct})
 
         return quiz_data_table
     except Exception as e:

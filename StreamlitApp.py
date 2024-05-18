@@ -6,20 +6,16 @@ from dotenv import load_dotenv
 from src.mcqgenerator.utils import read_file, get_table_data
 import streamlit as st
 from langchain.callbacks import get_openai_callback
-from src.mcqgenerator.MCQgenerator import generate_evaluate_chain
+from src.mcqgenerator.MCQGenerator import generate_evaluate_chain
 from src.mcqgenerator.logger import logging
 
-# Load environment variables
-load_dotenv()
+
 
 # Loading JSON file
-try:
-    with open('/config/workspace/Response.json' , 'r') as file:
-        RESPONSE_JSON = json.load(file)
+with open(r'C:\Users\Ziad\MCQGen\Response.json', 'r') as file:
+    RESPONSE_JSON = json.load(file)
 
-except FileNotFoundError:
-    st.error("JSON file not found.")
-    RESPONSE_JSON = {}
+
 
 # Creating title for the app
 st.title("MCQs Creator Application using LangChain")
@@ -62,18 +58,18 @@ with st.form('user_inputs'):
                 st.write(f"Total Cost: {cb.total_cost}")
                 
                 if isinstance(response, dict):
-                    quiz = response.get("quiz")
-                    if quiz:
+                    quiz = response.get("quiz",None)
+                    if quiz is not None:
                         table_data = get_table_data(quiz)
                         if table_data is not None:
                             df = pd.DataFrame(table_data)
                             df.index = df.index + 1
                             st.table(df)
                             # Display the review in a text box as well
-                            st.text_area(label="Review", value=response.get('review', ''))
+                            st.text_area(label="Review", value=response['review'])
                         else:
                             st.error('Error in the table data')
-                    else:
-                        st.error('No quiz data found in the response')
+                
+                       
                 else:
                     st.write(response)

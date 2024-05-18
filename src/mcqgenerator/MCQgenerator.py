@@ -13,7 +13,7 @@ from langchain.chains import LLMChain
 from langchain.chains import SequentialChain
 
 #load envernoment variable from the .env file
-load_dotenv()
+load_dotenv()   
 
 KEY=os.getenv('KEY')
 
@@ -52,7 +52,7 @@ Quiz_MCQs:
 Check from an expert English Writer of the above quiz:
 """
 
-quiz_evaluation_prompt=PromptTemplate(input_variables=["subject", "quiz"], template=TEMPLATE)
+quiz_evaluation_prompt=PromptTemplate(input_variables=["subject", "quiz"], template=TEMPLATE2)
 
 review_chain=LLMChain(llm=llm, prompt=quiz_evaluation_prompt, output_key="review", verbose=True)
 
