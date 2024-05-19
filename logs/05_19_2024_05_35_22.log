@@ -1,0 +1,10 @@
+[2024-05-19 05:35:43,993] 1026 httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2024-05-19 05:35:45,438] 1026 httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2024-05-19 05:35:45,462] 23 root - INFO - Quiz string before JSON parsing: 
+### RESPONSE_JSON
+{"question1": {"mcq": "Who coined the term machine learning in 1959?", "options": {"A": "Arthur Samuel", "B": "Donald Hebb", "C": "Walter Pitts", "D": "Warren McCulloch"}, "correct": "A"},
+"question2": {"mcq": "What was the name of the experimental learning machine developed by Raytheon Company in the early 1960s?", "options": {"A": "Cybertron", "B": "HAL 9000", "C": "Skynet", "D": "R2-D2"}, "correct": "A"},
+"question3": {"mcq": "Which book provided a formal definition of the algorithms studied in the machine learning field?", "options": {"A": "The Organization of Behavior", "B": "Learning Machines", "C": "Computing Machinery and Intelligence", "D": "Cybertron Chronicles"}, "correct": "B"},
+"question4": {"mcq": "What is one of the objectives of modern-day machine learning?", "options": {"A": "To classify data based on models developed", "B": "To predict the weather accurately", "C": "To build robots with human-like intelligence", "D": "To explore outer space"}, "correct": "A"},
+"question5": {"mcq": "Which researcher proposed the early mathematical models of neural networks for machine learning algorithms?", "options": {"A": "Arthur Samuel", "B": "Donald Hebb", "C": "Walter Pitts", "D": "Warren McCulloch"}, "correct": "C"}}
+[2024-05-19 05:35:45,463] 47 root - ERROR - Error in get_table_data: Expecting value: line 2 column 1 (char 1)

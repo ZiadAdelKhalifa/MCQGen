@@ -1,75 +1,81 @@
 import os
 import json
-import pandas as pd
 import traceback
+import pandas as pd
 from dotenv import load_dotenv
-from src.mcqgenerator.utils import read_file, get_table_data
+from src.mcqgenerator.utils import read_file,get_table_data
 import streamlit as st
 from langchain.callbacks import get_openai_callback
 from src.mcqgenerator.MCQGenerator import generate_evaluate_chain
 from src.mcqgenerator.logger import logging
 
+#loading json file
 
-
-# Loading JSON file
-with open(r'C:\Users\Ziad\MCQGen\Response.json', 'r') as file:
+with open('Response.json', 'r') as file:
     RESPONSE_JSON = json.load(file)
 
+#creating a title for the app
+st.title("MCQs Creator Application with LangChain 🦜⛓️")
 
+#Create a form using st.form
+with st.form("user_inputs"):
+    #File Upload
+    uploaded_file=st.file_uploader("Uplaod a PDF or txt file")
 
-# Creating title for the app
-st.title("MCQs Creator Application using LangChain")
+    #Input Fields
+    mcq_count=st.number_input("No. of MCQs", min_value=3, max_value=50)
 
-# Create a form using st.form
-with st.form('user_inputs'):
-    # File upload
-    upload_file = st.file_uploader("Upload a PDF or text file")
+    #Subject
+    subject=st.text_input("Insert Subject",max_chars=20)
 
-    # Input fields
-    mcq_count = st.number_input("Number of MCQs", min_value=5, max_value=100)
-    subject = st.text_input("Insert subject", max_chars=30)
-    tone = st.text_input("Complexity of the quiz", max_chars=30, placeholder='Simple')
+    # Quiz Tone
+    tone=st.text_input("Complexity Level Of Questions", max_chars=20, placeholder="Simple")
 
-    # Add button
-    button = st.form_submit_button('Create MCQs')
+    #Add Button
+    button=st.form_submit_button("Create MCQs")
 
-    # Check if the button is clicked and the input fields are inserted or not
-    if button and upload_file is not None and mcq_count and subject and tone:
-        with st.spinner("Loading ....."):
+    # Check if the button is clicked and all fields have input
+
+    if button and uploaded_file is not None and mcq_count and subject and tone:
+        with st.spinner("loading..."):
             try:
-                text = read_file(upload_file)
-
-                # Count tokens and the cost of the API call
+                text=read_file(uploaded_file)
+                #Count tokens and the cost of API call
                 with get_openai_callback() as cb:
-                    response = generate_evaluate_chain({
+                    response=generate_evaluate_chain(
+                        {
                         "text": text,
                         "number": mcq_count,
-                        "subject": subject,
+                        "subject":subject,
                         "tone": tone,
                         "response_json": json.dumps(RESPONSE_JSON)
-                    })
+                            }
+                    )
+                #st.write(response)
+
             except Exception as e:
                 traceback.print_exception(type(e), e, e.__traceback__)
-                st.error("Error during MCQ generation.")
+                st.error("Error")
+
             else:
-                st.write(f"Total Tokens: {cb.total_tokens}")
-                st.write(f"Prompt Tokens: {cb.prompt_tokens}")
-                st.write(f"Completion Tokens: {cb.completion_tokens}")
-                st.write(f"Total Cost: {cb.total_cost}")
-                
+                print(f"Total Tokens:{cb.total_tokens}")
+                print(f"Prompt Tokens:{cb.prompt_tokens}")
+                print(f"Completion Tokens:{cb.completion_tokens}")
+                print(f"Total Cost:{cb.total_cost}")
                 if isinstance(response, dict):
-                    quiz = response.get("quiz",None)
+                    #Extract the quiz data from the response
+                    quiz=response.get("quiz", None)
                     if quiz is not None:
-                        table_data = get_table_data(quiz)
+                        table_data=get_table_data(quiz)
+                        print(table_data)
                         if table_data is not None:
-                            df = pd.DataFrame(table_data)
-                            df.index = df.index + 1
+                            df=pd.DataFrame(table_data)
+                            df.index=df.index+1
                             st.table(df)
-                            # Display the review in a text box as well
-                            st.text_area(label="Review", value=response['review'])
+                            #Display the review in atext box as well
+                            st.text_area(label="Review", value=response["review"])
                         else:
-                            st.error('Error in the table data')
-                
-                       
+                            st.error("Error in the table data")
+
                 else:
                     st.write(response)
