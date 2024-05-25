@@ -60,7 +60,7 @@ with st.form("user_inputs"):
             else:
                 print(f"Total Tokens:{cb.total_tokens}")
                 print(f"Prompt Tokens:{cb.prompt_tokens}")
-                print(f"Completion Tokens:{cb.completion_tokens}")
+                print(f"Completion Tokens:{cb.completion_tokens}") 
                 print(f"Total Cost:{cb.total_cost}")
                 if isinstance(response, dict):
                     #Extract the quiz data from the response
